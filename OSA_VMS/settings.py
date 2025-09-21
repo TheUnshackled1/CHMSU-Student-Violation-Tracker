@@ -125,5 +125,5 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = 'tracker:login'
+LOGIN_URL = 'tracker:log'
 LOGIN_REDIRECT_URL = 'tracker:student_list'

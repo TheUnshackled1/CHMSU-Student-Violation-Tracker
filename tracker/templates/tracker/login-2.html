@@ -4,30 +4,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
-
-    
+    <title>Student Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
   </head>
   <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success mb-3">
-  <div class="container-fluid">
-    
-    <a class="navbar-brand d-flex align-items-center" href="{% url 'tracker:student_list' %}">
-      <img src="{% static 'images/chmsu.png' %}" alt="Logo" class="brand-logo me-1">
-      Student Violation Tracker
-    </a>
-
-    
-  <div class="ms-auto">
-    <a class="nav-link text-white" href="{% url 'tracker:about' %}">Student Handbook</a>
-  </div>
-  </div>
-</nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success mb-3">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <img src="{% static 'images/chmsu.png' %}" alt="Logo" class="brand-logo me-1">
+          Student Violation Tracker
+        </a>
+        <div class="ms-auto">
+            <a class="nav-link text-white" href="{% url 'tracker:about' %}">Student Handbook</a>
+        </div>
+      </div>
+    </nav>
 
     <div class="container">
       <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
@@ -35,33 +28,28 @@
           <div class="card-body">
               <h5 class="card-title text-center mb-4 d-flex align-items-center justify-content-center">
                 <img src="{% static 'images/chmsu.png' %}" alt="CHMSU Logo" class="me-2" style="height: 32px;">
-                Login
+                Student Login
               </h5>
 
             <form method="post" novalidate>
               {% csrf_token %}
-              {{ form.non_field_errors }}
-
-              {% for field in form %}
-                <div class="mb-3">
-                  {{ field.label_tag }}
-                  {{ field }}
-                  {% if field.help_text %}
-                    <div class="form-text muted-small">{{ field.help_text }}</div>
-                  {% endif %}
-                  {% for error in field.errors %}
-                    <div class="text-danger small">{{ error }}</div>
-                  {% endfor %}
-                </div>
-              {% endfor %}
+              {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+              {% endif %}
+               {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+              <div class="mb-3">
+                <label for="student_id" class="form-label">Student ID</label>
+                <input type="text" name="student_id" id="student_id" class="form-control">
+              </div>
 
               <div class="d-grid">
                 <button type="submit" class="btn btn-success">Login</button>
               </div>
-              <p class="mt-3 text-center">
-                Don’t have an account? <a href="{% url 'tracker:signup' %}">Signup</a>
-              </p>
-                  <div class="d-flex justify-content-center">
+               <div class="d-flex justify-content-center mt-3">
                     <a class="btn btn-primary" href="{% url 'tracker:log' %}">Back to Login</a>
                   </div>
             </form>
@@ -70,7 +58,6 @@
       </div>
     </div>
 
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

@@ -1,0 +1,155 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About - School Disciplinary Measures</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+  </head>
+  <body class='bg-light'>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success mb-3">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'tracker:student_list' %}">
+          <img src="{% static 'images/chmsu.png' %}" alt="Logo" class="brand-logo me-1">
+          Student Violation Tracker
+        </a>
+
+        <div class="ms-auto">
+            <a class="nav-link text-white" href="{% url 'tracker:log' %}">Go Back</a>
+        </div>
+      </div>
+    </nav>
+
+
+
+    <section id="about" class="container my-5">
+      <h1 class="mb-4 text-center">About School Disciplinary Measures, Offenses, and Penalties</h1>
+
+      <p>
+        Discipline in Higher Education Institutions (HEIs) provides students with guidance for proper behavior and conduct while maintaining order within the school community. Students are expected to exercise freedom and maturity in self-development and to assume full responsibility for their actions, both on and off campus. Sanctions are imposed when necessary to prevent misbehavior and promote accountability.
+      </p>
+
+      <h2 class="mt-4">Sanctions</h2>
+      <ul>
+        <li><strong>Verbal Warning / Written Reprimand</strong> – becomes part of the student’s record.</li>
+        <li><strong>Suspension</strong> – exclusion from classes (not exceeding 20% of prescribed school days) and recorded in the student’s file.</li>
+        <li><strong>Dismissal / Expulsion</strong> – extreme sanction requiring CHED approval, permanently barring the student from private and public schools.</li>
+        <li><strong>Fines</strong> – imposed depending on the offense committed.</li>
+      </ul>
+
+      <h2 class="mt-4">Legend</h2>
+      <p><strong>Frequency of Occurrence & Penalties</strong></p>
+      <ul>
+        <li>1st Offense (Minor): Verbal warning / written reprimand with community service</li>
+        <li>2nd Offense: Suspension (Minor – 2 days, Major – 5 days)</li>
+        <li>3rd Offense (Major): Dismissal / Expulsion</li>
+      </ul>
+      <p><em>Note: A minor offense may escalate into a major offense.</em></p>
+
+      <h2 class="mt-4">Minor Offenses</h2>
+      <p>Minor offenses are disruptive acts contrary to school rules but do not result in physical harm or property damage. Examples include:</p>
+      <ul>
+        <li>Leaving/entering classrooms without permission</li>
+        <li>Loitering, disturbing classes, or excessive noise in corridors</li>
+        <li>Texting/gaming during class hours</li>
+        <li>Unauthorized selling, fundraising, or posting of materials</li>
+        <li>Violation of dress code or regulative signs</li>
+        <li>Public display of intimacy, loud hair colors, refusal of drug testing, etc.</li>
+      </ul>
+
+      <h2 class="mt-4">Major Offenses</h2>
+      <p>Major offenses are serious violations that cause harm, damage property, or degrade dignity within the community. Examples include:</p>
+      <ul>
+        <li>Violence, assault, or fighting</li>
+        <li>Cheating, bribery, or falsifying school records</li>
+        <li>Sexual harassment, slander, gossiping with malicious intent</li>
+        <li>Stealing, swindling, or extortion</li>
+        <li>Drug or alcohol use within campus</li>
+        <li>Hazing, bullying, cyberbullying, or gross discourtesy</li>
+        <li>Carrying deadly weapons or tampering with safety equipment</li>
+      </ul>
+
+      <h2 class="mt-4">Grievance and Complaint Procedures</h2>
+      <p>
+        CHMSC ensures fairness and justice through due process in addressing complaints and grievances. Informal complaints are first addressed through counseling, arbitration, and amicable settlement. If unresolved, they escalate to formal grievances, disciplinary hearings, and, if necessary, appeals to higher authorities.
+      </p>
+      <ul>
+        <li><strong>Complaint:</strong> Filed with the OSAS Discipline Officer, including details of the incident and desired remedy.</li>
+        <li><strong>Grievance:</strong> Raised if a complaint remains unresolved after 5 days, handled by the Student Grievance and Discipline Tribunal (SGDT).</li>
+        <li><strong>Hearing:</strong> Both parties present evidence, and the SGDT issues findings, sanctions, and resolutions.</li>
+        <li><strong>Appeal:</strong> May be elevated to the Administration Office within 48 hours of the decision.</li>
+      </ul>
+
+      <h2 class="mt-4">Imposition and Responsibility</h2>
+      <p>Disciplinary authority is distributed across school personnel:</p>
+      <ul>
+        <li><strong>Teachers</strong> – enforce classroom discipline and recommend actions.</li>
+        <li><strong>Program Chairpersons</strong> – investigate and refer cases to the Dean.</li>
+        <li><strong>College Deans / Executive Directors</strong> – determine the type and gravity of offenses.</li>
+        <li><strong>Director of Student Affairs</strong> – manages sanctions and represents the administration.</li>
+        <li><strong>Discipline Officer (DO)</strong> – implements policies, handles preliminary hearings, and documents cases.</li>
+        <li><strong>Student Grievance and Discipline Tribunal (SGDT)</strong> – composed of student, faculty, and administrative representatives to hear and decide cases.</li>
+      </ul>
+
+      <p class="mt-4">
+        The goal of all disciplinary actions is not only to maintain order but also to uphold fairness, dignity, and personal growth among students.
+      </p>
+    </section>
+
+    <section id="code-of-conduct" class="container my-5">
+      <h1 class="mb-4 text-center">Student Code of Conduct</h1>
+      <p>
+        Discipline in Education is specifically mandated by the 1987 Constitution (Art. XIV, Sec. 3.2), which provides that all educational institutions shall “teach the rights and duties of citizenship, strengthen ethical and spiritual values and develop moral character and personal discipline.”
+      </p>
+      <p>
+        Enrollment at Carlos Hilado Memorial State College is considered an implicit acceptance of these and other policies applicable to students, all of which are educational and designed to help students understand the expectations and accept responsibility for their actions, to promote and maintain peace and tranquility of the HEI by observing the rules of discipline as provided for by Batas Pambansa Blg. 232 (1982), Section 15.3.
+      </p>
+
+      <h2 class="mt-4">General Provisions</h2>
+      <p>
+        Students are expected to conduct themselves in a manner that promotes their continuing development as persons and continuing development of their peers. They have the responsibility to ensure that the academic environment of the HEI is wholesome and conducive to human formation.
+      </p>
+      <p>
+        HEI cannot be held responsible for the behavior and activities of the students outside the campus. However, students may be subjected to disciplinary measures for improper conduct in a school-related function outside the campus or for unauthorized use of the HEI’s name when misconduct affects its reputation.
+      </p>
+      <p>
+        All disciplinary matters concerning students come under the jurisdiction of the Office for Student Affairs and Services.
+      </p>
+
+      <h3 class="mt-3">A. Care for the School Environment</h3>
+      <ul class="ps-3">
+        <li>Respect and maintain school properties.</li>
+        <li>Conserve water and energy.</li>
+        <li>Unauthorized movement of equipment is prohibited.</li>
+        <li>Damage must be repaired or replaced by the student.</li>
+        <li>CHMSC is a smoke-free campus.</li>
+        <li>Loitering during class hours is prohibited.</li>
+        <li>Proper waste segregation must be observed.</li>
+      </ul>
+
+      <h3 class="mt-3">B. School ID, Uniform and Dress Code</h3>
+      <ul class="ps-3">
+        <li>Wearing of ID is mandatory.</li>
+        <li>Borrowing or falsifying ID is prohibited.</li>
+        <li>Prescribed uniforms must be worn on designated days.</li>
+        <li>Proper attire is required on wash days.</li>
+      </ul>
+
+      <div class="d-flex justify-content-center mt-4">
+        <a class="btn btn-warning" href="{% url 'tracker:log' %}">Go Back</a>
+      </div>
+    </section>
+<footer class="bg-success text-white text-center py-5 mt-auto">
+      <p class="mb-0">All rights reserved &copy; {% now "Y" %} John Tyrone P. Coronel</p>
+    </footer>
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

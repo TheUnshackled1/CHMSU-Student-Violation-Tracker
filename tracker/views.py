@@ -7,14 +7,47 @@ from django.db.models import Count
 from .models import Student, Violation
 from .forms import ViolationForm, StudentForm
 
+
+def log_view(request):
+    if request.method == "POST":
+        role = request.POST.get("role")
+        if role == "faculty":
+            return redirect("tracker:login")
+        elif role == "student":
+            return redirect("tracker:student_login")
+    return render(request, "tracker/log.html")
+
+
+def student_login_view(request):
+    if request.method == "POST":
+        student_id = request.POST.get("student_id")
+        if not student_id:
+            messages.error(request, "Please enter a student ID.")
+            return render(request, "tracker/login-2.html")
+
+        try:
+            student = Student.objects.get(student_id=student_id)
+            return redirect("tracker:student_violation", pk=student.pk)
+        except Student.DoesNotExist:
+            messages.error(request, "Student ID not found.")
+            return render(request, "tracker/login-2.html")
+
+    return render(request, "tracker/login-2.html")
+
+
+def student_violation_view(request, pk):
+    student = get_object_or_404(Student, pk=pk)
+    return render(request, "tracker/student_violations.html", {"student": student})
+
+
+
 def signup_view(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False  # ✅ Require approval
+            user.is_active = False
             user.save()
-            # Don’t log them in yet
             return render(request, "tracker/pending_approval.html")
     else:
         form = UserCreationForm()
@@ -41,20 +74,23 @@ def logout_view(request):
     logout(request)
     return redirect("tracker:login")
 
+def about_view(request):
+    return render(request, "tracker/about.html")
 
-@login_required
+
+@login_required(login_url='tracker:log')
 def student_list(request):
     students = Student.objects.all()
     return render(request, "tracker/student_list.html", {"students": students})
 
 
-@login_required
+@login_required(login_url='tracker:log')
 def student_detail(request, pk):
     student = get_object_or_404(Student, pk=pk)
     return render(request, "tracker/student_detail.html", {"student": student})
 
 
-@login_required
+@login_required(login_url='tracker:log')
 def add_student(request):
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -67,7 +103,7 @@ def add_student(request):
     return render(request, "tracker/violation_form.html", {"form": form})
 
 
-@login_required
+@login_required(login_url='tracker:log')
 def add_violation(request):
     initial = {}
     student_pk = request.GET.get("student")
@@ -80,9 +116,7 @@ def add_violation(request):
     if request.method == "POST":
         form = ViolationForm(request.POST)
         if form.is_valid():
-            violation = form.save()  # save violation with selected level
-
-            # ✅ Update student.noted automatically if violation is "Third Offense"
+            violation = form.save() 
             student = violation.student
             student.noted = violation.level == 3
             student.save(update_fields=["noted"])
@@ -110,22 +144,22 @@ def college_analytics(request):
 
     violation_counts = {item["student__college"]: item["count"] for item in violation_counts_query}
 
-    # Labels & data
+    
     college_labels = list(college_choices.values())
     violation_data = [violation_counts.get(abbr, 0) for abbr, name in Student.college.field.choices]
 
-    # Match colors to abbreviations
+    
     college_colors = {
-        "CAS": "rgba(0, 128, 0, 0.6)",   # Green
-        "CIT": "rgba(255, 0, 0, 0.6)",   # Red
-        "COE": "rgba(255, 165, 0, 0.6)", # Orange
-        "CBMA": "rgba(255, 255, 0, 0.6)",# Yellow
-        "CCS": "rgba(128, 128, 128, 0.6)",# Gray
-        "COED": "rgba(0, 0, 255, 0.6)",  # Blue
+        "CAS": "rgba(0, 128, 0, 0.6)",   
+        "CIT": "rgba(255, 0, 0, 0.6)",  
+        "COE": "rgba(255, 165, 0, 0.6)", 
+        "CBMA": "rgba(255, 255, 0, 0.6)",
+        "CCS": "rgba(128, 128, 128, 0.6)",
+        "COED": "rgba(0, 0, 255, 0.6)",
     }
 
     background_colors = [college_colors.get(abbr, "rgba(0,0,0,0.6)") for abbr, _ in Student.college.field.choices]
-    border_colors = [color.replace("0.6", "1") for color in background_colors]  # darker border
+    border_colors = [color.replace("0.6", "1") for color in background_colors]  
 
     context = {
         "college_labels": college_labels,
@@ -134,3 +168,5 @@ def college_analytics(request):
         "border_colors": border_colors,
     }
     return render(request, "tracker/college_analytics.html", context)
+
+
