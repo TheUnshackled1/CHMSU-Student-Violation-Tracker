@@ -1,0 +1,38 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">College Violation Analytics</h2>
+    <div style="width: 75%; margin: auto;">
+        <canvas id="collegeViolationsChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('collegeViolationsChart').getContext('2d');
+    const collegeViolationsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ college_labels|safe }},
+            datasets: [{
+                label: 'Violations Per College',
+                data: {{ violation_data|safe }},
+                backgroundColor: {{ background_colors|safe }},
+                borderColor: {{ border_colors|safe }},
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+        <div class="d-flex justify-content-center">
+        <a class="btn btn-warning" href="{% url 'tracker:student_list' %}">Back to Student List</a>
+        </div>
+{% endblock %}
