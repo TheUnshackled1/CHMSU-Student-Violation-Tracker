@@ -10,7 +10,16 @@
   </div>
 
   <p><strong>Student ID:</strong> {{ student.student_id }}</p>
-  <p><strong>Noted:</strong> {% if student.noted %}<span class="badge bg-danger">Yes</span>{% else %}<span class="badge bg-secondary">No</span>{% endif %}</p>
+<p>
+  <strong>Noted:</strong>
+  {% if student.noted %}
+      <span class="badge bg-secondary">No</span>
+
+  {% else %}
+      <span class="badge bg-danger">Yes</span>
+
+  {% endif %}
+</p>
 
   <h3>Violations</h3>
   <table class="table">

@@ -12,12 +12,16 @@ class ViolationForm(forms.ModelForm):
             "student": forms.Select(attrs={"class": "form-select"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Insert a placeholder option (blank value, not 1)
+        self.fields["level"].choices = [("", "Select Offense Level")] + list(self.fields["level"].choices)
+
     def clean_level(self):
         level = self.cleaned_data.get("level")
-        if level == 1:  # placeholder
+        if level in ("", None):  # user left placeholder
             raise forms.ValidationError("Please select a valid offense level.")
         return level
-
 
 
 class StudentForm(forms.ModelForm):
