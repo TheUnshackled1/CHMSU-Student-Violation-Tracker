@@ -72,7 +72,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("tracker:login")
+    return redirect("tracker:log")
 
 def about_view(request):
     return render(request, "tracker/about.html")

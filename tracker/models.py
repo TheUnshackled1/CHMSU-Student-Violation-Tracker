@@ -36,17 +36,15 @@ class Student(models.Model):
         return f"{self.student_id} - {self.last_name}, {self.first_name}"
 
 
-
 class Violation(models.Model):
     OFFENSE_LEVELS = [
-        (0, "Select Offense Level"),  # acts like a placeholder
+        (0, "Select Offense Level"),  
         (1, "First Offense"),
         (2, "Second Offense"),
         (3, "Third Offense"),
     ]
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="violations")
-
     offense = models.CharField(
         max_length=255,
         verbose_name="Reason for the Offense / Student’s Explanation",
@@ -61,10 +59,8 @@ class Violation(models.Model):
     def __str__(self):
         return f"{self.student.student_id} - {self.offense} ({self.get_level_display()})"
 
-
-
 def _update_noted_status(student_or_pk):
-    """Mark student.noted True if latest violation is Third Offense (level 4)."""
+    """Mark student.noted True if total violations >= 3."""
     if isinstance(student_or_pk, Student):
         pk = student_or_pk.pk
     else:
@@ -72,10 +68,11 @@ def _update_noted_status(student_or_pk):
 
     student = Student.objects.filter(pk=pk).first()
     if not student:
-        return  # student was deleted
+        return  # student deleted
 
-    latest_violation = student.violations.first()  # ordered by -occurred_at
-    should_be_noted = latest_violation and latest_violation.level == 4
+    # Count total violations
+    total_violations = student.violations.count()
+    should_be_noted = total_violations == 3  # noted if 3 or more violations
 
     if student.noted != should_be_noted:
         student.noted = should_be_noted
@@ -85,13 +82,9 @@ def _update_noted_status(student_or_pk):
 
 @receiver(post_save, sender=Violation)
 def on_violation_saved(sender, instance: Violation, created, **kwargs):
-    # whenever a violation is created or updated, recalculate noted
     _update_noted_status(instance.student_id)
-
 
 @receiver(post_delete, sender=Violation)
 def on_violation_deleted(sender, instance: Violation, **kwargs):
-    # when a violation is removed, recalculate noted
-    # use student_id because instance.student may point to a deleted object during cascade
-    _update_noted_status(instance.student_id)
-
+    if Student.objects.filter(pk=instance.student_id).exists():
+        _update_noted_status(instance.student_id)
