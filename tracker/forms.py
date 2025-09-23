@@ -14,7 +14,6 @@ class ViolationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Insert a placeholder option (blank value, not 1)
         self.fields["level"].choices = [("", "Select Offense Level")] + list(self.fields["level"].choices)
 
     def clean_level(self):

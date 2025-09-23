@@ -109,6 +109,7 @@ body::before {
   border-radius: 50%; 
 }
 
+/* Accordion customization */
 .accordion-button:not(.collapsed) {
     background-color: #198754;
     color: white;
@@ -186,7 +187,6 @@ body::before {
   background-color: #ffffff !important;
   color: #0d6efd;
 }
-
 
 .accordion-button.college-unspecified:not(.collapsed) {
   background-color: #198754;

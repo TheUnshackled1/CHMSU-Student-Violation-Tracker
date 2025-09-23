@@ -6,7 +6,6 @@ from django.core.validators import RegexValidator
 
 class Student(models.Model):
     student_id = models.CharField(
-        primary_key=True,
         max_length=8,
         unique=True,
         validators=[RegexValidator(regex=r'^\d{1,8}$', message="ID must be numeric and up to 8 digits.")]

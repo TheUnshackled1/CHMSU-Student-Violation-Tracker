@@ -29,17 +29,26 @@
     {% for college_group in college_list %}
       <div class="accordion-item">
         <h5 class="accordion-header" id="heading{{ forloop.counter }}">
-          <button class="accordion-button {% if not forloop.first %}collapsed{% endif %} college-{{ college_group.grouper|default:'unspecified'|lower }}" 
-                  type="button" 
-                  data-bs-toggle="collapse" 
-                  data-bs-target="#collapse{{ forloop.counter }}"
-                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
-                  aria-controls="collapse{{ forloop.counter }}">
+          <button
+            class="accordion-button {% if not forloop.first %}collapsed{% endif %} 
+              {% if college_group.grouper|lower == 'cas' %}college-cas
+              {% elif college_group.grouper|lower == 'cbma' %}college-cbma
+              {% elif college_group.grouper|lower == 'ccs' %}college-ccs
+              {% elif college_group.grouper|lower == 'cit' %}college-cit
+              {% elif college_group.grouper|lower == 'coe' %}college-coe
+              {% elif college_group.grouper|lower == 'coed' %}college-coed
+              {% else %}college-unspecified{% endif %}"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapse{{ forloop.counter }}"
+            aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+            aria-controls="collapse{{ forloop.counter }}">
             {{ college_group.grouper|default:"Unspecified College"|upper }}
             <span class="badge bg-secondary ms-2">{{ college_group.list|length }} students</span>
           </button>
         </h5>
-        <div id="collapse{{ forloop.counter }}" 
+
+        <div id="collapse{{ forloop.counter }}"
              class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
              aria-labelledby="heading{{ forloop.counter }}"
              data-bs-parent="#collegeAccordion">
