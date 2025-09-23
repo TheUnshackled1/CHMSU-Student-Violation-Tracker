@@ -6,6 +6,7 @@ from django.core.validators import RegexValidator
 
 class Student(models.Model):
     student_id = models.CharField(
+        primary_key=True,
         max_length=8,
         unique=True,
         validators=[RegexValidator(regex=r'^\d{1,8}$', message="ID must be numeric and up to 8 digits.")]
@@ -61,30 +62,21 @@ class Violation(models.Model):
 
 
 def _update_noted_status(student: Student):
-    total_violations = student.violations.count()
-
-    if total_violations >= 3:
-        # Mark noted
-        student.noted = True
+    """Helper: mark student.noted True if they have 3 or more violations, else False."""
+    count = student.violations.count()
+    should_be_noted = count >= 3
+    if student.noted != should_be_noted:
+        student.noted = should_be_noted
         student.save(update_fields=["noted"])
-
-        # Reset violations completely (back to 0)
-        student.violations.all().delete()
-
-    else:
-        # If violations are less than 3, make sure "noted" is reset to False
-        if student.noted:
-            student.noted = False
-            student.save(update_fields=["noted"])
 
 
 @receiver(post_save, sender=Violation)
 def on_violation_saved(sender, instance: Violation, created, **kwargs):
-    # Pass the actual Student object instead of student_id
+    # whenever a violation is created or updated, recalculate noted
     _update_noted_status(instance.student)
 
 
 @receiver(post_delete, sender=Violation)
 def on_violation_deleted(sender, instance: Violation, **kwargs):
-    if instance.student:
-        _update_noted_status(instance.student)
+    # when a violation is removed, recalculate noted
+    _update_noted_status(instance.student)

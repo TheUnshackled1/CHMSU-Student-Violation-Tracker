@@ -80,7 +80,12 @@ def about_view(request):
 
 @login_required(login_url='tracker:log')
 def student_list(request):
-    students = Student.objects.all()
+    # allow optional ?sort=name or ?sort=college
+    sort = request.GET.get("sort", "college")
+    if sort == "name":
+        students = Student.objects.all().order_by("last_name", "first_name")
+    else:
+        students = Student.objects.all().order_by("college", "last_name", "first_name")
     return render(request, "tracker/student_list.html", {"students": students})
 
 

@@ -13,51 +13,106 @@
     </div>
   </div>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Student ID</th>
-        <th>Name</th>
-        <th>College</th> 
-        <th>Violations</th>
-        <th>Noted</th>
-        <th></th>
-      </tr>
-    </thead>
+  <!-- Collapse All/Expand All buttons -->
+  <div class="mb-3">
+    <button class="btn btn-outline-secondary btn-sm" type="button" id="expandAllBtn">
+      <i class="bi bi-chevron-down"></i> Expand All
+    </button>
+    <button class="btn btn-outline-secondary btn-sm" type="button" id="collapseAllBtn">
+      <i class="bi bi-chevron-up"></i> Collapse All
+    </button>
+  </div>
 
-    <tbody>
-      {% for student in students %}
-        {% with student.violations.count as v_count %}
-        <tr>
-          <td>{{ student.student_id }}</td>
-          <td
-            {% if v_count >= 3 %}
-              class="text-danger fw-bold"
-            {% elif v_count == 2 %}
-              class="text-warning fw-bold"
-            {% elif v_count == 1 %}
-              class="text-secondary fw-bold"
-            {% endif %}
-          >
-            {{ student.last_name }}, {{ student.first_name }}
-          </td>
-          <td>{{ student.get_college_display }}</td>
-          <td>{{ v_count }}</td>
-          <td>
-            {% if v_count >= 3 %}
-              <span class="badge bg-danger">Noted</span>
-            {% else %}
-              <span class="badge bg-secondary">OK</span>
-            {% endif %}
-          </td>
-          <td>
-            <a class="btn btn-sm btn-outline-primary" href="{% url 'tracker:student_detail' student.pk %}">View</a>
-          </td>
-        </tr>
-        {% endwith %}
-      {% empty %}
-        <tr><td colspan="6">No students yet.</td></tr> 
-      {% endfor %}
-    </tbody>
-  </table>
+  {% regroup students by college as college_list %}
+
+  <div class="accordion" id="collegeAccordion">
+    {% for college_group in college_list %}
+      <div class="accordion-item">
+        <h5 class="accordion-header" id="heading{{ forloop.counter }}">
+          <button class="accordion-button {% if not forloop.first %}collapsed{% endif %} college-{{ college_group.grouper|default:'unspecified'|lower }}" 
+                  type="button" 
+                  data-bs-toggle="collapse" 
+                  data-bs-target="#collapse{{ forloop.counter }}"
+                  aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-controls="collapse{{ forloop.counter }}">
+            {{ college_group.grouper|default:"Unspecified College"|upper }}
+            <span class="badge bg-secondary ms-2">{{ college_group.list|length }} students</span>
+          </button>
+        </h5>
+        <div id="collapse{{ forloop.counter }}" 
+             class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+             aria-labelledby="heading{{ forloop.counter }}"
+             data-bs-parent="#collegeAccordion">
+          <div class="accordion-body p-0">
+            <table class="table table-striped mb-0">
+              <thead>
+                <tr>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Violations</th>
+                  <th>Noted</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for student in college_group.list %}
+                  {% with student.violations.count as v_count %}
+                  <tr>
+                    <td>{{ student.student_id }}</td>
+                    <td
+                      {% if v_count >= 3 %}
+                        class="text-danger fw-bold"
+                      {% elif v_count == 2 %}
+                        class="text-warning fw-bold"
+                      {% elif v_count == 1 %}
+                        class="text-secondary fw-bold"
+                      {% endif %}
+                    >
+                      {{ student.last_name }}, {{ student.first_name }}
+                    </td>
+                    <td>{{ v_count }}</td>
+                    <td>
+                      {% if v_count >= 3 %}
+                        <span class="badge bg-danger">Noted</span>
+                      {% else %}
+                        <span class="badge bg-secondary">OK</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tracker:student_detail' student.pk %}">View</a>
+                    </td>
+                  </tr>
+                  {% endwith %}
+                {% empty %}
+                  <tr><td colspan="5">No students in this college.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const expandAllBtn = document.getElementById('expandAllBtn');
+    const collapseAllBtn = document.getElementById('collapseAllBtn');
+    const accordionItems = document.querySelectorAll('.accordion-collapse');
+
+    expandAllBtn.addEventListener('click', function() {
+        accordionItems.forEach(item => {
+            bootstrap.Collapse.getOrCreateInstance(item).show();
+        });
+    });
+
+    collapseAllBtn.addEventListener('click', function() {
+        accordionItems.forEach(item => {
+            bootstrap.Collapse.getOrCreateInstance(item).hide();
+        });
+    });
+});
+</script>
 {% endblock %}
